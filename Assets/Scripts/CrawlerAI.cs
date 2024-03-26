@@ -35,7 +35,7 @@ public class CrawlerAI : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("First Person Player").transform;
+        player = GameObject.FindWithTag("Player").transform;
         playerHealthScript = player.GetComponent<PlayerHealth>();
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
