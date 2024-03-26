@@ -1,124 +1,135 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//This script requires you to have setup your animator with 3 parameters, "InputMagnitude", "InputX", "InputZ"
-//With a blend tree to control the inputmagnitude and allow blending between animations.
 [RequireComponent(typeof(CharacterController))]
-public class MovementInput : MonoBehaviour {
-
+public class MovementInput : MonoBehaviour
+{
     public float Velocity;
-    [Space]
+    public float JumpForce; // Step 1: Jump force variable
+    public float GroundCheckDistance = 1f; // Distance to check if the player is grounded
 
-	public float InputX;
-	public float InputZ;
-	public Vector3 desiredMoveDirection;
-	public bool blockRotationPlayer;
-	public float desiredRotationSpeed = 0.1f;
-	public Animator anim;
-	public float Speed;
-	public float allowPlayerRotation = 0.1f;
-	public Camera cam;
-	public CharacterController controller;
-	public bool isGrounded;
+    public float InputX;
+    public float InputZ;
+    public Vector3 desiredMoveDirection;
+    public bool blockRotationPlayer;
+    public float desiredRotationSpeed = 0.1f;
+    public Animator anim;
+    public float Speed;
+    public float allowPlayerRotation = 0.1f;
+    public Camera cam;
+    public CharacterController controller;
 
-    [Header("Animation Smoothing")]
-    [Range(0, 1f)]
-    public float HorizontalAnimSmoothTime = 0.2f;
-    [Range(0, 1f)]
-    public float VerticalAnimTime = 0.2f;
-    [Range(0,1f)]
-    public float StartAnimTime = 0.3f;
-    [Range(0, 1f)]
-    public float StopAnimTime = 0.15f;
+    private Vector3 velocity;
 
-    public float verticalVel;
     private Vector3 moveVector;
+    private bool isGrounded;
 
-	// Use this for initialization
-	void Start () {
-		anim = this.GetComponent<Animator> ();
-		cam = Camera.main;
-		controller = this.GetComponent<CharacterController> ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		InputMagnitude ();
+    public float gravity = -9.81f;
+    public float jumpHeight = 3f;
 
-        isGrounded = controller.isGrounded;
-        if (isGrounded)
-        {
-            verticalVel -= 0;
-        }
-        else
-        {
-            verticalVel -= 1;
-        }
-        moveVector = new Vector3(0, verticalVel * .2f * Time.deltaTime, 0);
-        controller.Move(moveVector);
+    public LayerMask groundMask;
+    public float groundDistance = 0.4f;
 
-
+    void Start()
+    {
+        anim = GetComponent<Animator>();
+        cam = Camera.main;
+        controller = GetComponent<CharacterController>();
     }
 
-    void PlayerMoveAndRotation() {
-		InputX = Input.GetAxis ("Horizontal");
-		InputZ = Input.GetAxis ("Vertical");
-
-		var camera = Camera.main;
-		var forward = cam.transform.forward;
-		var right = cam.transform.right;
-
-		forward.y = 0f;
-		right.y = 0f;
-
-		forward.Normalize ();
-		right.Normalize ();
-
-		desiredMoveDirection = forward * InputZ + right * InputX;
-
-		if (blockRotationPlayer == false) {
-			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (desiredMoveDirection), desiredRotationSpeed);
-            controller.Move(desiredMoveDirection * Time.deltaTime * Velocity);
-		}
-	}
-
-    public void LookAt(Vector3 pos)
+    void Update()
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(pos), desiredRotationSpeed);
+
+        InputMagnitude();
+        CheckGrounded(); // Step 4: Check if the player is grounded
+
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+
+        if (Input.GetButtonDown("Jump")) // Step 2: Check for jump input and grounded condition
+        {
+            if(isGrounded)
+            {
+                Jump(); // Step 3: Trigger the jump
+                anim.SetTrigger("Jump");
+            }
+            
+        }
+
+        velocity.y += gravity * Time.deltaTime;
+
+        controller.Move(velocity * Time.deltaTime);
     }
 
-    public void RotateToCamera(Transform t)
+    void InputMagnitude()
     {
+        //Calculate Input Vectors
+        InputX = Input.GetAxis("Horizontal");
+        InputZ = Input.GetAxis("Vertical");
+
+        //anim.SetFloat ("InputZ", InputZ, VerticalAnimTime, Time.deltaTime * 2f);
+        //anim.SetFloat ("InputX", InputX, HorizontalAnimSmoothTime, Time.deltaTime * 2f);
+
+        //Calculate the Input Magnitude
+        Speed = new Vector2(InputX, InputZ).sqrMagnitude;
+
+        float inputMagnitude = Mathf.Sqrt(InputX * InputX + InputZ * InputZ);
+        float normalizedMagnitude = Mathf.Clamp01(inputMagnitude);
+
+        Debug.Log("Speed: " + Speed);
+
+
+        //Physically move player
+        if (Speed > allowPlayerRotation)
+        {
+            anim.SetFloat("Speed", Speed);
+            //anim.SetTrigger("Run");
+            PlayerMoveAndRotation();
+        }
+        else if (Speed < allowPlayerRotation)
+        {
+            anim.SetFloat("Speed", Speed);
+            //anim.ResetTrigger("Run");
+        }
+    }
+
+    void PlayerMoveAndRotation()
+    {
+        InputX = Input.GetAxis("Horizontal");
+        InputZ = Input.GetAxis("Vertical");
 
         var camera = Camera.main;
         var forward = cam.transform.forward;
         var right = cam.transform.right;
 
-        desiredMoveDirection = forward;
+        forward.y = 0f;
+        right.y = 0f;
 
-        t.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), desiredRotationSpeed);
+        forward.Normalize();
+        right.Normalize();
+
+        desiredMoveDirection = forward * InputZ + right * InputX;
+
+        if (blockRotationPlayer == false)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), desiredRotationSpeed);
+            controller.Move(desiredMoveDirection * Time.deltaTime * Velocity);
+        }
     }
 
-	void InputMagnitude() {
-		//Calculate Input Vectors
-		InputX = Input.GetAxis ("Horizontal");
-		InputZ = Input.GetAxis ("Vertical");
+    void Jump()
+    {
+        // Apply a vertical impulse to the player's movement
+        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        anim.SetTrigger("Jump");
+    }
 
-		//anim.SetFloat ("InputZ", InputZ, VerticalAnimTime, Time.deltaTime * 2f);
-		//anim.SetFloat ("InputX", InputX, HorizontalAnimSmoothTime, Time.deltaTime * 2f);
-
-		//Calculate the Input Magnitude
-		Speed = new Vector2(InputX, InputZ).sqrMagnitude;
-
-        //Physically move player
-
-		if (Speed > allowPlayerRotation) {
-			anim.SetFloat ("Blend", Speed, StartAnimTime, Time.deltaTime);
-			PlayerMoveAndRotation ();
-		} else if (Speed < allowPlayerRotation) {
-			anim.SetFloat ("Blend", Speed, StopAnimTime, Time.deltaTime);
-		}
-	}
+    void CheckGrounded()
+    {
+        // Check if the player is grounded using a downward raycast
+        isGrounded = Physics.CheckSphere(transform.position, groundDistance, groundMask);
+    }
 }
