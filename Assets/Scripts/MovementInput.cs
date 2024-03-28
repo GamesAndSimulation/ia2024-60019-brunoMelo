@@ -10,7 +10,7 @@ public class MovementInput : MonoBehaviour
     public float GroundCheckDistance = 1f; // Distance to check if the player is grounded
 
     public float InputX;
-    public float InputZ;
+    public float InputV;
     public Vector3 desiredMoveDirection;
     public bool blockRotationPlayer;
     public float desiredRotationSpeed = 0.1f;
@@ -23,13 +23,14 @@ public class MovementInput : MonoBehaviour
     private Vector3 velocity;
 
     private Vector3 moveVector;
-    private bool isGrounded;
+    private bool IsGrounded;
 
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
 
     public LayerMask groundMask;
     public float groundDistance = 0.4f;
+
 
     void Start()
     {
@@ -40,23 +41,38 @@ public class MovementInput : MonoBehaviour
 
     void Update()
     {
-
         InputMagnitude();
         CheckGrounded(); // Step 4: Check if the player is grounded
 
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
+        Debug.Log("Velocity: " + velocity.y);
+        Debug.Log("IsGrounded: " +IsGrounded);
 
-        if (Input.GetButtonDown("Jump")) // Step 2: Check for jump input and grounded condition
+        if (IsGrounded)
         {
-            if(isGrounded)
+            if(velocity.y < 0)
             {
-                Jump(); // Step 3: Trigger the jump
-                anim.SetTrigger("Jump");
+                velocity.y = -2f;
             }
             
+            anim.SetBool("IsGrounded", true);
+            anim.SetBool("IsJumping", false);
+            anim.SetBool("IsFalling", false);
+
+            if (Input.GetButtonDown("Jump")) // Step 2: Check for jump input and grounded condition
+            {
+            
+                Jump(); // Step 3: Trigger the jump
+                anim.SetBool("IsJumping", true);
+            }
+        }
+
+        else
+        {
+            anim.SetBool("IsGrounded", false);
+            if(velocity.y < -2)
+            {
+                anim.SetBool("IsFalling", true);
+            }
         }
 
         velocity.y += gravity * Time.deltaTime;
@@ -68,18 +84,19 @@ public class MovementInput : MonoBehaviour
     {
         //Calculate Input Vectors
         InputX = Input.GetAxis("Horizontal");
-        InputZ = Input.GetAxis("Vertical");
+        InputV = Input.GetAxis("Vertical");
 
-        //anim.SetFloat ("InputZ", InputZ, VerticalAnimTime, Time.deltaTime * 2f);
+        anim.SetFloat("hzInput", InputX);
+        anim.SetFloat("vInput", InputV);
+
+        //anim.SetFloat ("InputV", InputV, VerticalAnimTime, Time.deltaTime * 2f);
         //anim.SetFloat ("InputX", InputX, HorizontalAnimSmoothTime, Time.deltaTime * 2f);
 
         //Calculate the Input Magnitude
-        Speed = new Vector2(InputX, InputZ).sqrMagnitude;
+        Speed = new Vector2(InputX, InputV).sqrMagnitude;
 
-        float inputMagnitude = Mathf.Sqrt(InputX * InputX + InputZ * InputZ);
+        float inputMagnitude = Mathf.Sqrt(InputX * InputX + InputV * InputV);
         float normalizedMagnitude = Mathf.Clamp01(inputMagnitude);
-
-        Debug.Log("Speed: " + Speed);
 
 
         //Physically move player
@@ -99,7 +116,7 @@ public class MovementInput : MonoBehaviour
     void PlayerMoveAndRotation()
     {
         InputX = Input.GetAxis("Horizontal");
-        InputZ = Input.GetAxis("Vertical");
+        InputV = Input.GetAxis("Vertical");
 
         var camera = Camera.main;
         var forward = cam.transform.forward;
@@ -111,15 +128,16 @@ public class MovementInput : MonoBehaviour
         forward.Normalize();
         right.Normalize();
 
-        desiredMoveDirection = forward * InputZ + right * InputX;
+        //desiredMoveDirection = transform.right * InputX + transform.forward * InputV;
 
-        if (blockRotationPlayer == false)
-        {
+        desiredMoveDirection = forward * InputV + right * InputX;
+
+        //if (blockRotationPlayer == false)
+        //{
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), desiredRotationSpeed);
             controller.Move(desiredMoveDirection * Time.deltaTime * Velocity);
-        }
+        //}
     }
-
     void Jump()
     {
         // Apply a vertical impulse to the player's movement
@@ -130,6 +148,6 @@ public class MovementInput : MonoBehaviour
     void CheckGrounded()
     {
         // Check if the player is grounded using a downward raycast
-        isGrounded = Physics.CheckSphere(transform.position, groundDistance, groundMask);
+        IsGrounded = Physics.CheckSphere(transform.position, groundDistance, groundMask);
     }
 }
