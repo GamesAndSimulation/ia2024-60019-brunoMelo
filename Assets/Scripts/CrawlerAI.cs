@@ -51,8 +51,6 @@ public class CrawlerAI : MonoBehaviour
 
         if(target.IsDead())
         {
-            // Stop the NavMeshAgent from moving
-            agent.isStopped = true;
             return; // Exit the Update() method to stop further processing
         }
 

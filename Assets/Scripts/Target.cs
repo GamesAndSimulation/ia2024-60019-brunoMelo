@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class Target : MonoBehaviour
@@ -14,12 +15,17 @@ public class Target : MonoBehaviour
     private Animator animator;
     private Canvas healthCanvas; // Reference to the Canvas component
 
+    private Rigidbody rb;
+    private NavMeshAgent agent;
+
 
     private void Awake()
     {
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
         healthCanvas = GetComponentInChildren<Canvas>();
+        rb = GetComponent<Rigidbody>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     private void Update()
@@ -40,10 +46,9 @@ public class Target : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        if(currentHealth <= 0f)
+        if(IsDead())
         {
-            animator.SetTrigger("Death");
-            //Die();
+            Die();
         }
     }
 
@@ -54,6 +59,11 @@ public class Target : MonoBehaviour
 
     private void Die()
     {
-        Destroy(gameObject);
+        animator.SetTrigger("Death");
+        rb.useGravity = true;
+        if(agent != null)
+        {
+            agent.enabled = false;
+        }
     }
 }

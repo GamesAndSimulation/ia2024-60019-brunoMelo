@@ -9,6 +9,8 @@ TagManager:
   - PlayerEyes
   - Health
   - Enemy Bullet
+  - Player Center
+  - Player Projectile
   layers:
   - Default
   - TransparentFX

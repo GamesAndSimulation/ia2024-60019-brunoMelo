@@ -17,8 +17,10 @@ public class HealthPickUp : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        playerHealthScript.Heal(healAmount);
-        Destroy(gameObject);
-        
+        if(other.CompareTag("Player"))
+        {
+            playerHealthScript.Heal(healAmount);
+            Destroy(gameObject);
+        }
     }
 }
