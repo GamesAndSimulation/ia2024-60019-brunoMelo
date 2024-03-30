@@ -55,10 +55,6 @@ public class PlayerHealth : MonoBehaviour
             // Check if the object hit by the raycast has the tag "Fall"
             if (hit.collider.CompareTag("Fall"))
             {
-                // Handle the collision with the "Fall" object
-                Debug.Log("Player hit a fall object!");
-                // You can call any necessary methods here or perform other actions
-
                 TakeDamage(maxHealth);
             }
         }
@@ -73,10 +69,14 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Debug.Log("Dead");
-
             StartCoroutine(RespawnAfterDelay(2f));
         }
+    }
+
+    public void Heal(float healAmount)
+    {
+        currentHealth += healAmount;
+        if(currentHealth > 100) currentHealth = 100;
     }
 
     IEnumerator RespawnAfterDelay(float delay)

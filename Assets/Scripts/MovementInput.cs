@@ -44,9 +44,6 @@ public class MovementInput : MonoBehaviour
         InputMagnitude();
         CheckGrounded(); // Step 4: Check if the player is grounded
 
-        Debug.Log("Velocity: " + velocity.y);
-        Debug.Log("IsGrounded: " +IsGrounded);
-
         if (IsGrounded)
         {
             if(velocity.y < 0)
