@@ -35,7 +35,7 @@ public class MovementInput : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        cam = Camera.main;
+        Camera cam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         controller = GetComponent<CharacterController>();
     }
 
@@ -115,7 +115,6 @@ public class MovementInput : MonoBehaviour
         InputX = Input.GetAxis("Horizontal");
         InputV = Input.GetAxis("Vertical");
 
-        var camera = Camera.main;
         var forward = cam.transform.forward;
         var right = cam.transform.right;
 
@@ -131,7 +130,7 @@ public class MovementInput : MonoBehaviour
 
         //if (blockRotationPlayer == false)
         //{
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), desiredRotationSpeed);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), desiredRotationSpeed);
             controller.Move(desiredMoveDirection * Time.deltaTime * Velocity);
         //}
     }

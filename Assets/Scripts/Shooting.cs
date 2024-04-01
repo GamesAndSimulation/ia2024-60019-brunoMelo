@@ -25,6 +25,7 @@ public class Shooting : MonoBehaviour
     void Start()
     {
         readyToShoot = true;
+        cam = GameObject.FindWithTag("MainCamera").transform;
     }
 
     private void Shoot()
@@ -37,13 +38,13 @@ public class Shooting : MonoBehaviour
 
         Vector3 forceDirection = cam.transform.forward;
 
-        /*
+        
         RaycastHit hit;
         if(Physics.Raycast(cam.position, cam.forward, out hit, 500f))
         {
             forceDirection = (hit.point - attackPoint.position).normalized;
         }
-        */
+        
 
         Vector3 forceToAdd = cam.transform.forward * shootForce + transform.up * shootUpwardForce;
 

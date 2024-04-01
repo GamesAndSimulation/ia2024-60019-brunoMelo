@@ -23,7 +23,7 @@ public class DroneAI : MonoBehaviour
     public float timeBetweenAttacks;
     private bool alreadyAttacked;
 
-    private bool isMoving = true; // Flag to control movement
+    private bool isMoving; // Flag to control movement
 
     //States
     public float sightRange, attackRange;
@@ -51,6 +51,9 @@ public class DroneAI : MonoBehaviour
         target = GetComponent<Target>();
 
         originalPosition = transform.position; // Store the original position
+        isMoving = true;
+
+        animator.SetBool("IsMoving", true);
     }
 
     // Update is called once per frame
@@ -62,6 +65,7 @@ public class DroneAI : MonoBehaviour
 
         if (target.IsDead())
         {
+            animator.SetBool("IsDead", true);
             return; // Exit the Update() method to stop further processing
         }
 
@@ -154,7 +158,10 @@ public class DroneAI : MonoBehaviour
 
             if (!alreadyAttacked)
             {
+
+            
                 isMoving = false;
+                animator.SetBool("IsMoving", false);
 
                 transform.LookAt(playerCenter);
 
@@ -180,5 +187,6 @@ public class DroneAI : MonoBehaviour
     {
         alreadyAttacked = false;
         isMoving = true;
+        animator.SetBool("IsMoving", true);
     }
 }
