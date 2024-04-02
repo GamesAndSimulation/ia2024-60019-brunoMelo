@@ -59,7 +59,7 @@ public class Target : MonoBehaviour
 
     private void Die()
     {
-        animator.SetTrigger("Death");
+        animator.SetBool("IsDead", true);
         rb.useGravity = true;
         if(agent != null)
         {

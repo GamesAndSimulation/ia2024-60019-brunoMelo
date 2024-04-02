@@ -39,8 +39,6 @@ public class Shooting : MonoBehaviour
 
         GameObject projectile = Instantiate(objectToShoot, attackPoint.position, cam.rotation);
 
-        Debug.Log("Projectile type: " +objectToShoot.name);
-
         Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
 
         Vector3 forceDirection = cam.transform.forward;
@@ -69,7 +67,7 @@ public class Shooting : MonoBehaviour
     {
         ammoCount.text = objectToShoot.name + ": " + totalAmmo;
 
-        if(Input.GetKeyDown(shootKey) && readyToShoot && totalAmmo > 0) 
+        if(Input.GetKey(shootKey) && readyToShoot && totalAmmo > 0) 
         {
             Shoot();
         }

@@ -19,10 +19,20 @@ public class PlayerHealth : MonoBehaviour
     public float easeLerpSpeed = 0.01f;
     public float respawnYoffset = 3f;
 
+    public Animator anim;
+    private bool isDead;
+    public float respawnDelay = 2f;
+    public CharacterController characterController;
+    public GameObject weaponSwitching;
+
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
+        anim = player.GetComponent<Animator>();
+        characterController = player.GetComponent<CharacterController>();
+        weaponSwitching = GameObject.Find("Weapon Switching");
+        isDead = false;
     }
 
     void Update()
@@ -64,12 +74,17 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (damage > currentHealth) currentHealth = 0;
-        else currentHealth -= damage;
-
-        if (currentHealth <= 0)
+        if(!isDead)
         {
-            StartCoroutine(RespawnAfterDelay(2f));
+            if (damage > currentHealth) currentHealth = 0;
+            else currentHealth -= damage;
+
+            if (currentHealth <= 0)
+            {
+                isDead = true;
+                anim.SetBool("IsDead", true);
+                StartCoroutine(RespawnAfterDelay(respawnDelay));
+            }
         }
     }
 
@@ -81,22 +96,27 @@ public class PlayerHealth : MonoBehaviour
 
     IEnumerator RespawnAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay);
 
-        Debug.Log("Respawning...");
+        characterController.enabled = false;
+        weaponSwitching.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(delay);
 
         // Respawn the player after the delay
         player.position = respawnPoint;
         player.rotation = respawnRotation;
         currentHealth = maxHealth;
 
-        Debug.Log("Player respawned.");
+        characterController.enabled = true;
+
+        isDead = false;
+        anim.SetBool("IsDead", false);
+        weaponSwitching.gameObject.SetActive(true);
     }
 
     public void updateRespawn(Vector3 newRespawn, Quaternion respawnRotation)
     {
         this.respawnPoint = newRespawn;
         this.respawnRotation = respawnRotation;
-        Debug.Log("Update Respawn");
     }
 }

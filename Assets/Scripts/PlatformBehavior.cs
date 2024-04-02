@@ -52,7 +52,10 @@ public class PlatformBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        other.transform.SetParent(transform);
+        if(other.CompareTag("Player") || other.CompareTag("Enemy"))
+        {
+            other.transform.SetParent(transform);
+        }
     }
 
     private void OnTriggerExit(Collider other)

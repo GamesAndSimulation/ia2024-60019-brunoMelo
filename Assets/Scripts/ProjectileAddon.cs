@@ -21,7 +21,6 @@ public class ProjectileAddon : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Hit: " +collision.gameObject.name);
 
         if(!collision.transform.CompareTag("Player"))
         {

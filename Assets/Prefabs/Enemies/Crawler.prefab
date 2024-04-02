@@ -1159,7 +1159,7 @@ GameObject:
   - component: {fileID: 3239549520315627515}
   m_Layer: 0
   m_Name: Crawler
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1247,7 +1247,7 @@ MonoBehaviour:
   walkPointRange: 60
   timeBetweenAttacks: 1.5
   sightRange: 30
-  attackRange: 3
+  attackRange: 0.8
   playerInSightRange: 0
   playerInAttackRange: 1
   attackDamage: 10
