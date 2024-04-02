@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProjectileAddon : MonoBehaviour
@@ -20,6 +21,8 @@ public class ProjectileAddon : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Hit: " +collision.gameObject.name);
+
         if(!collision.transform.CompareTag("Player"))
         {
             if (targetHit)

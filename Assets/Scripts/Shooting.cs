@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Shooting : MonoBehaviour
 {
@@ -21,11 +22,15 @@ public class Shooting : MonoBehaviour
 
     private bool readyToShoot;
 
+    public Text ammoCount;
+
     // Start is called before the first frame update
     void Start()
     {
         readyToShoot = true;
         cam = GameObject.FindWithTag("MainCamera").transform;
+        attackPoint = GameObject.Find("Attack Point").transform;
+        ammoCount = GameObject.Find("Ammo Count").GetComponent<Text>();
     }
 
     private void Shoot()
@@ -33,6 +38,8 @@ public class Shooting : MonoBehaviour
         readyToShoot = false;
 
         GameObject projectile = Instantiate(objectToShoot, attackPoint.position, cam.rotation);
+
+        Debug.Log("Projectile type: " +objectToShoot.name);
 
         Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
 
@@ -60,6 +67,8 @@ public class Shooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ammoCount.text = objectToShoot.name + ": " + totalAmmo;
+
         if(Input.GetKeyDown(shootKey) && readyToShoot && totalAmmo > 0) 
         {
             Shoot();

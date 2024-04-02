@@ -51,9 +51,15 @@ public class DroneAI : MonoBehaviour
         target = GetComponent<Target>();
 
         originalPosition = transform.position; // Store the original position
+        
+    }
+
+    private void Start()
+    {
         isMoving = true;
 
         animator.SetBool("IsMoving", true);
+
     }
 
     // Update is called once per frame
