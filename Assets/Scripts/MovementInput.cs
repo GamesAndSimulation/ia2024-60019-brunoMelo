@@ -31,6 +31,9 @@ public class MovementInput : MonoBehaviour
     public LayerMask groundMask;
     public float groundDistance = 0.4f;
 
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip footstepSound;
+
 
     void Start()
     {
@@ -60,6 +63,7 @@ public class MovementInput : MonoBehaviour
             
                 Jump(); // Step 3: Trigger the jump
                 anim.SetBool("IsJumping", true);
+                SoundFXManager.instance.PlaySoundFXClip(jumpSound, transform, 1f);
             }
         }
 
@@ -145,5 +149,10 @@ public class MovementInput : MonoBehaviour
     {
         // Check if the player is grounded using a downward raycast
         IsGrounded = Physics.CheckSphere(transform.position, groundDistance, groundMask);
+    }
+
+    public void PlayFootstepSounds()
+    {
+        SoundFXManager.instance.PlaySoundFXClip(footstepSound, transform, 0.2f);
     }
 }

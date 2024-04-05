@@ -1250,7 +1250,9 @@ MonoBehaviour:
   attackRange: 0.8
   playerInSightRange: 0
   playerInAttackRange: 1
-  attackDamage: 10
+  attackDamage: 15
+  runningSound: {fileID: 8300000, guid: 6f2470ebe69e1534a80960f8c4f8ea6a, type: 3}
+  attackSound: {fileID: 8300000, guid: 4b5c4130f5468244096ee9561014944d, type: 3}
 --- !u!195 &412523115066140533
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1288,6 +1290,11 @@ MonoBehaviour:
   maxHealth: 50
   healthSlider: {fileID: 1927010089717932054}
   easeLerpSpeed: 5
+  damageSoundClips:
+  - {fileID: 8300000, guid: 49d8f5ccdf883ec45b0ab1e0d42aaf3e, type: 3}
+  - {fileID: 8300000, guid: bcf31ae51b1e9f64b9b25bf97ae7063b, type: 3}
+  - {fileID: 8300000, guid: 524f23d4dce3d954c90b67dea43bf542, type: 3}
+  deathSoundClip: {fileID: 8300000, guid: e16daa14dde3f264dab8bff0667cbfcc, type: 3}
 --- !u!54 &3239549520315627515
 Rigidbody:
   m_ObjectHideFlags: 0

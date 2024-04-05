@@ -18,6 +18,9 @@ public class Target : MonoBehaviour
     private Rigidbody rb;
     private NavMeshAgent agent;
 
+    [SerializeField] private AudioClip[] damageSoundClips;
+    [SerializeField] private AudioClip deathSoundClip;
+
 
     private void Awake()
     {
@@ -46,9 +49,17 @@ public class Target : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+
+       
+
         if(IsDead())
         {
+            SoundFXManager.instance.PlaySoundFXClip(deathSoundClip, transform, 1f * 3);
             Die();
+        }
+        else
+        {
+            SoundFXManager.instance.PlayRandomSoundFXClip(damageSoundClips, transform, 1f);
         }
     }
 

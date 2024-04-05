@@ -24,6 +24,11 @@ public class Shooting : MonoBehaviour
 
     public Text ammoCount;
 
+    public bool isAiming;
+    public CinemachineCameraOffset cinemachineCameraOffset;
+
+    [SerializeField] private AudioClip shootSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +36,8 @@ public class Shooting : MonoBehaviour
         cam = GameObject.FindWithTag("MainCamera").transform;
         attackPoint = GameObject.Find("Attack Point").transform;
         ammoCount = GameObject.Find("Ammo Count").GetComponent<Text>();
+        cinemachineCameraOffset = GameObject.Find("FreeLook Camera").GetComponent<CinemachineCameraOffset>();
+        isAiming = false;
     }
 
     private void Shoot()
@@ -55,6 +62,8 @@ public class Shooting : MonoBehaviour
 
         projectileRB.AddForce(forceToAdd, ForceMode.Impulse);
 
+        SoundFXManager.instance.PlaySoundFXClip(shootSound, transform, 1f);
+
         totalAmmo--;
 
         Invoke(nameof(ResetShoot), shootCooldown);
@@ -67,10 +76,26 @@ public class Shooting : MonoBehaviour
     {
         ammoCount.text = objectToShoot.name + ": " + totalAmmo;
 
-        if(Input.GetKey(shootKey) && readyToShoot && totalAmmo > 0) 
+        if(Input.GetMouseButton(1))
         {
-            Shoot();
+            isAiming = true;
+
+            cinemachineCameraOffset.m_Offset.z = 1;
+
+            if (Input.GetKey(shootKey) && readyToShoot && totalAmmo > 0)
+            {
+                Shoot();
+            }
         }
+
+        else
+        {
+            isAiming = false;
+
+            cinemachineCameraOffset.m_Offset.z = -1;
+        }
+
+        
     }
 
     private void ResetShoot()

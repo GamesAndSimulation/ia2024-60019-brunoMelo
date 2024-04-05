@@ -6,6 +6,8 @@ public class RiflePickUp : MonoBehaviour
 {
     private WeaponSwitching weaponSwitchingScript;
 
+    [SerializeField] private AudioClip weaponUnlockSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +19,7 @@ public class RiflePickUp : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            SoundFXManager.instance.PlaySoundFXClip(weaponUnlockSound, transform, 1f);
             weaponSwitchingScript.UnlockRiffle();
             Destroy(gameObject);
         }

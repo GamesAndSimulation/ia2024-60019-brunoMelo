@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd8fa6cf7b523144a23b2a119de5b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponUnlockSound: {fileID: 8300000, guid: 4367d9de9daf63a4fa8cb36084dc13f6, type: 3}
 --- !u!1 &8241695132556054877
 GameObject:
   m_ObjectHideFlags: 0

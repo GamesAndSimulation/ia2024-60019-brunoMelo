@@ -32,6 +32,9 @@ public class CrawlerAI : MonoBehaviour
 
     private Target target;
 
+    [SerializeField] private AudioClip runningSound;
+    [SerializeField] private AudioClip attackSound;
+
 
     private void Awake()
     {
@@ -66,7 +69,10 @@ public class CrawlerAI : MonoBehaviour
 
         if (playerInSightRange && playerInAttackRange) 
         { 
-            AttackPlayer(); }
+            AttackPlayer(); 
+        }
+
+        //SoundFXManager.instance.PlaySoundFXClip(runningSound, transform, 0.2f);
     }
 
     private void Patroling()
@@ -124,6 +130,8 @@ public class CrawlerAI : MonoBehaviour
             if (!alreadyAttacked)
             {
 
+                SoundFXManager.instance.PlaySoundFXClip(attackSound, transform, 1f);
+
                 playerHealthScript.TakeDamage(attackDamage);
 
                 alreadyAttacked = true;
@@ -136,5 +144,10 @@ public class CrawlerAI : MonoBehaviour
     private void ResetAttack()
     {
         alreadyAttacked = false;
+    }
+
+    public void RunningSound()
+    {
+        //SoundFXManager.instance.PlaySoundFXClip(runningSound, transform, 0.2f);
     }
 }

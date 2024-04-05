@@ -25,12 +25,18 @@ public class PlayerHealth : MonoBehaviour
     public CharacterController characterController;
     public GameObject weaponSwitching;
 
+    public GameController gameController;
+
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip[] hurtSounds;
+
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
         anim = player.GetComponent<Animator>();
         characterController = player.GetComponent<CharacterController>();
+        gameController = player.GetComponent<GameController>();
         weaponSwitching = GameObject.Find("Weapon Switching");
         isDead = false;
     }
@@ -65,7 +71,8 @@ public class PlayerHealth : MonoBehaviour
             // Check if the object hit by the raycast has the tag "Fall"
             if (hit.collider.CompareTag("Fall"))
             {
-                TakeDamage(maxHealth);
+                player.SetParent(null);
+                StartCoroutine(RespawnAfterDelay(respawnDelay / 2));
             }
         }
     }
@@ -81,9 +88,20 @@ public class PlayerHealth : MonoBehaviour
 
             if (currentHealth <= 0)
             {
+
+                SoundFXManager.instance.PlaySoundFXClip(deathSound, transform, 1f);
+
+                //gameController.GameOver();
                 isDead = true;
                 anim.SetBool("IsDead", true);
+
+                characterController.enabled = false;
+                weaponSwitching.gameObject.SetActive(false);
                 StartCoroutine(RespawnAfterDelay(respawnDelay));
+            }
+            else
+            {
+                SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f);
             }
         }
     }
@@ -94,15 +112,29 @@ public class PlayerHealth : MonoBehaviour
         if(currentHealth > 100) currentHealth = 100;
     }
 
-    IEnumerator RespawnAfterDelay(float delay)
+    public IEnumerator RespawnAfterDelay(float delay)
     {
 
-        characterController.enabled = false;
-        weaponSwitching.gameObject.SetActive(false);
+       
 
         yield return new WaitForSeconds(delay);
 
         // Respawn the player after the delay
+        player.position = respawnPoint;
+        player.rotation = respawnRotation;
+        currentHealth = maxHealth;
+
+        player.SetParent(null);
+
+        characterController.enabled = true;
+
+        isDead = false;
+        anim.SetBool("IsDead", false);
+        weaponSwitching.gameObject.SetActive(true);
+    }
+
+    public void Respawn()
+    {
         player.position = respawnPoint;
         player.rotation = respawnRotation;
         currentHealth = maxHealth;

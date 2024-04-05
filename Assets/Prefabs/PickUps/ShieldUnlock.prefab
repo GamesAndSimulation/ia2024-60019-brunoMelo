@@ -240,3 +240,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eddc8cda771be34fa4787fc7d9de7a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponUnlockSound: {fileID: 8300000, guid: 4367d9de9daf63a4fa8cb36084dc13f6, type: 3}

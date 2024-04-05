@@ -379,3 +379,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healAmount: 100
+  healhPickUpSound: {fileID: 8300000, guid: 794eabb8d586d174b8d2975ac427b6b6, type: 3}

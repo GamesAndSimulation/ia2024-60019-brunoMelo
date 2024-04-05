@@ -8,6 +8,8 @@ public class HealthPickUp : MonoBehaviour
 
     public float healAmount = 100f;
 
+    [SerializeField] private AudioClip healhPickUpSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,7 @@ public class HealthPickUp : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
+            SoundFXManager.instance.PlaySoundFXClip(healhPickUpSound, transform, 1f);
             playerHealthScript.Heal(healAmount);
             Destroy(gameObject);
         }

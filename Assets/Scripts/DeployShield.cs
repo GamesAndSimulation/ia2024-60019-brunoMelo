@@ -12,6 +12,8 @@ public class DeployShield : MonoBehaviour
     public float deployCooldown = 10f;
     public float shieldDuration = 3f;
 
+    [SerializeField] private AudioClip deployShieldSound;
+
     void Start()
     {
         attackPoint = GameObject.Find("Shield Point").transform;
@@ -40,6 +42,8 @@ public class DeployShield : MonoBehaviour
     {
         if(readyToDeploy)
         {
+            SoundFXManager.instance.PlaySoundFXClip(deployShieldSound, transform, 0.7f);
+
             readyToDeploy = false;
 
             GameObject shieldDeployed = Instantiate(shieldPrefab, attackPoint.position, cam.rotation);

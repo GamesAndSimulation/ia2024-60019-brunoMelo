@@ -41,6 +41,9 @@ public class DroneAI : MonoBehaviour
     public float movementSpeed = 5f;
     public float rotationSpeed = 10f;
 
+    [SerializeField] private AudioClip hoverSound;
+    [SerializeField] private AudioClip fireSound;
+
 
     private void Awake()
     {
@@ -74,6 +77,8 @@ public class DroneAI : MonoBehaviour
             animator.SetBool("IsDead", true);
             return; // Exit the Update() method to stop further processing
         }
+
+        //SoundFXManager.instance.PlaySoundFXClip(hoverSound, transform, 0.2f);
 
         if (!playerInSightRange && !playerInAttackRange)
         {
@@ -179,6 +184,8 @@ public class DroneAI : MonoBehaviour
 
                 // Set the velocity of the projectile
                 projectile.GetComponent<Rigidbody>().velocity = direction * projectileSpeed;
+
+                SoundFXManager.instance.PlaySoundFXClip(fireSound, transform, 1f);
 
                 alreadyAttacked = true;
 

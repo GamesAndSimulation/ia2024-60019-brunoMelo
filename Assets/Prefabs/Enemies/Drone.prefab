@@ -539,8 +539,8 @@ Rigidbody:
   m_GameObject: {fileID: 1443157479970004354}
   serializedVersion: 4
   m_Mass: 100
-  m_Drag: 2
-  m_AngularDrag: 1
+  m_Drag: 0.1
+  m_AngularDrag: 0.1
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -580,12 +580,14 @@ MonoBehaviour:
   attackRange: 25
   playerInSightRange: 0
   playerInAttackRange: 0
-  attackDamage: 15
+  attackDamage: 25
   projectilePrefab: {fileID: 6090240444802627395, guid: 5148ceeb6adb05349ac016b258790214, type: 3}
   firePoint: {fileID: 409732432149393586}
   projectileSpeed: 30
   movementSpeed: 5
   rotationSpeed: 3
+  hoverSound: {fileID: 8300000, guid: 8399d9ead4ad393409aed0037d2b3885, type: 3}
+  fireSound: {fileID: 8300000, guid: 96ecaf06861a5924995c05b900260101, type: 3}
 --- !u!114 &3175568397262897094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -601,6 +603,11 @@ MonoBehaviour:
   maxHealth: 50
   healthSlider: {fileID: 97128693643683507}
   easeLerpSpeed: 0.05
+  damageSoundClips:
+  - {fileID: 8300000, guid: bcf31ae51b1e9f64b9b25bf97ae7063b, type: 3}
+  - {fileID: 8300000, guid: 524f23d4dce3d954c90b67dea43bf542, type: 3}
+  - {fileID: 8300000, guid: 49d8f5ccdf883ec45b0ab1e0d42aaf3e, type: 3}
+  deathSoundClip: {fileID: 8300000, guid: e16daa14dde3f264dab8bff0667cbfcc, type: 3}
 --- !u!135 &6621523219853912017
 SphereCollider:
   m_ObjectHideFlags: 0
