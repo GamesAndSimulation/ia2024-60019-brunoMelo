@@ -31,19 +31,28 @@ public class MovementInput : MonoBehaviour
     public LayerMask groundMask;
     public float groundDistance = 0.4f;
 
+    private PlayerHealth playerHealthScript;
+
     [SerializeField] private AudioClip jumpSound;
     [SerializeField] private AudioClip footstepSound;
+
+    public Transform[] shortcuts;
+    private Transform player;
 
 
     void Start()
     {
+        player = GameObject.Find("Main Player").transform;
         anim = GetComponent<Animator>();
         Camera cam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         controller = GetComponent<CharacterController>();
+        playerHealthScript = GetComponent<PlayerHealth>();
     }
 
     void Update()
     {
+        
+
         InputMagnitude();
         CheckGrounded(); // Step 4: Check if the player is grounded
 
@@ -79,6 +88,31 @@ public class MovementInput : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("Player position before: " + player.position);
+            player.position = shortcuts[0].position;
+            Debug.Log("Position 0");
+            Debug.Log("Player position: " + player.position);
+            Debug.Log("First Checkpoint position: " + shortcuts[0].position);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            player.position = shortcuts[1].position;
+            Debug.Log("Position 1");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            player.position = shortcuts[2].position;
+            Debug.Log("Position 2");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            player.position = shortcuts[3].position;
+            Debug.Log("Position 3");
+        }
     }
 
     void InputMagnitude()
@@ -86,6 +120,12 @@ public class MovementInput : MonoBehaviour
         //Calculate Input Vectors
         InputX = Input.GetAxis("Horizontal");
         InputV = Input.GetAxis("Vertical");
+
+        if(playerHealthScript.IsDead())
+        {
+            InputX = 0;
+            InputV = 0;
+        }
 
         anim.SetFloat("hzInput", InputX);
         anim.SetFloat("vInput", InputV);

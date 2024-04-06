@@ -19,19 +19,4 @@ public class YRotation : MonoBehaviour
         // Smoothly rotate the object towards the target rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime);
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player") || other.CompareTag("Enemy"))
-        {
-            other.transform.SetParent(transform);
-            Debug.Log("Parent");
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        other.transform.SetParent(null);
-        Debug.Log("Unparent");
-    }
 }

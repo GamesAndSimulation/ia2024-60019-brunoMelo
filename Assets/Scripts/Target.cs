@@ -54,12 +54,12 @@ public class Target : MonoBehaviour
 
         if(IsDead())
         {
-            SoundFXManager.instance.PlaySoundFXClip(deathSoundClip, transform, 1f * 3);
+            SoundFXManager.instance.PlaySoundFXClip(deathSoundClip, transform, 1f);
             Die();
         }
         else
         {
-            SoundFXManager.instance.PlayRandomSoundFXClip(damageSoundClips, transform, 1f);
+            SoundFXManager.instance.PlayRandomSoundFXClip(damageSoundClips, transform, 0.5f);
         }
     }
 

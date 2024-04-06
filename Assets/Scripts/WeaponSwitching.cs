@@ -45,22 +45,24 @@ public class WeaponSwitching : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha1)) 
+        
+        if(Input.GetKeyDown(KeyCode.Z)) 
         {
             selectedWeapon = 0;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount >= 2 && sniperUnlocked)
+        if (Input.GetKeyDown(KeyCode.X) && transform.childCount >= 2 && sniperUnlocked)
         {
             selectedWeapon = 1;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && transform.childCount >= 3 && rifleUnlocked)
+        if (Input.GetKeyDown(KeyCode.C) && transform.childCount >= 3 && rifleUnlocked)
         {
             selectedWeapon = 2;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4) && transform.childCount >= 4 && shotgunUnlocked)
+        if (Input.GetKeyDown(KeyCode.V) && transform.childCount >= 4 && shotgunUnlocked)
         {
             selectedWeapon = 3;
         }
+        
 
         if (previousSelectedWeapon != selectedWeapon)
         {

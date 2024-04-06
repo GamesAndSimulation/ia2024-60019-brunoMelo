@@ -8,7 +8,7 @@ public class ShockerCollider : MonoBehaviour
     public float damageInterval = 1f; // Adjust this value to change the interval
     private bool canDamage = false; // Initially set to false
 
-    public float soundMaxDistance = 30f;
+    public float soundMaxDistance = 200f;
 
 
     [SerializeField] private AudioClip electricitySounds;
@@ -33,7 +33,7 @@ public class ShockerCollider : MonoBehaviour
             // Calculate the volume based on the distance
             float adjustedVolume = Mathf.Clamp01(1f - (distanceToPlayer / soundMaxDistance)) * 1f;
 
-            SoundFXManager.instance.PlaySoundFXClip(electricitySounds, transform, adjustedVolume);
+            SoundFXManager.instance.PlaySoundFXClip(electricitySounds, transform, 0.01f);
             Invoke(nameof(ResetSound), electricitySounds.length);
         }
           
@@ -43,8 +43,10 @@ public class ShockerCollider : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            canDamage = true; // Allow continuous damage
-            StartCoroutine(ApplyDamageRepeatedly()); // Start the coroutine for continuous damage
+            //canDamage = true; // Allow continuous damage
+            //StartCoroutine(ApplyDamageRepeatedly()); // Start the coroutine for continuous damage
+            playerHealthScript.TakeDamage(shockDamage);
+
         }
     }
 

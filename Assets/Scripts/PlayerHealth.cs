@@ -27,6 +27,8 @@ public class PlayerHealth : MonoBehaviour
 
     public GameController gameController;
 
+    private bool falled = false;
+
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private AudioClip[] hurtSounds;
 
@@ -71,8 +73,12 @@ public class PlayerHealth : MonoBehaviour
             // Check if the object hit by the raycast has the tag "Fall"
             if (hit.collider.CompareTag("Fall"))
             {
+                falled = true;
+
                 player.SetParent(null);
-                StartCoroutine(RespawnAfterDelay(respawnDelay / 2));
+                SoundFXManager.instance.PlaySoundFXClip(deathSound, transform, 1f);
+                //StartCoroutine(RespawnAfterDelay(respawnDelay / 2));
+                Respawn();
             }
         }
     }
@@ -95,7 +101,7 @@ public class PlayerHealth : MonoBehaviour
                 isDead = true;
                 anim.SetBool("IsDead", true);
 
-                characterController.enabled = false;
+                //characterController.enabled = false;
                 weaponSwitching.gameObject.SetActive(false);
                 StartCoroutine(RespawnAfterDelay(respawnDelay));
             }
@@ -126,11 +132,13 @@ public class PlayerHealth : MonoBehaviour
 
         player.SetParent(null);
 
-        characterController.enabled = true;
+        //characterController.enabled = true;
 
         isDead = false;
         anim.SetBool("IsDead", false);
         weaponSwitching.gameObject.SetActive(true);
+
+        falled = false;
     }
 
     public void Respawn()
@@ -139,9 +147,10 @@ public class PlayerHealth : MonoBehaviour
         player.rotation = respawnRotation;
         currentHealth = maxHealth;
 
-        characterController.enabled = true;
+        //characterController.enabled = true;
 
         isDead = false;
+        falled = false;
         anim.SetBool("IsDead", false);
         weaponSwitching.gameObject.SetActive(true);
     }
@@ -150,5 +159,10 @@ public class PlayerHealth : MonoBehaviour
     {
         this.respawnPoint = newRespawn;
         this.respawnRotation = respawnRotation;
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
     }
 }

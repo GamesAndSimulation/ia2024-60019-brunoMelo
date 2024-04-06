@@ -1245,9 +1245,9 @@ MonoBehaviour:
     m_Bits: 128
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointRange: 60
-  timeBetweenAttacks: 1.5
+  timeBetweenAttacks: 1
   sightRange: 30
-  attackRange: 0.8
+  attackRange: 1.5
   playerInSightRange: 0
   playerInAttackRange: 1
   attackDamage: 15
@@ -1294,7 +1294,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 49d8f5ccdf883ec45b0ab1e0d42aaf3e, type: 3}
   - {fileID: 8300000, guid: bcf31ae51b1e9f64b9b25bf97ae7063b, type: 3}
   - {fileID: 8300000, guid: 524f23d4dce3d954c90b67dea43bf542, type: 3}
-  deathSoundClip: {fileID: 8300000, guid: e16daa14dde3f264dab8bff0667cbfcc, type: 3}
+  deathSoundClip: {fileID: 8300000, guid: 51318aecbf7b56040b7aacda398f0229, type: 3}
 --- !u!54 &3239549520315627515
 Rigidbody:
   m_ObjectHideFlags: 0
